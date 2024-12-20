@@ -6,14 +6,13 @@ from .models import Post
 
 def post_list(request):
     posts_list = Post.published.all()
-    
-    # Norodome kad rodysime tik 3 postus viename puslapyje.
-    
+
+    # Norodome kad rodysime tik 3 postus viename puslapyje..
+
     paginator = Paginator(posts_list, 3)
-    page_number = request.GET.get('page', 1)
+    page_number = request.GET.get("page", 1)
     posts = paginator.page(page_number)
-    
-    
+
     return render(request, "blog/post/list.html", {"posts": posts})
 
 
@@ -24,9 +23,6 @@ def post_detail(request, year, month, day, post):
         slug=post,
         publish__year=year,
         publish__month=month,
-        publish__day=day)
-    return render(
-        request,
-        'blog/post/detail.html',
-        {'post': post}
+        publish__day=day,
     )
+    return render(request, "blog/post/detail.html", {"post": post})
