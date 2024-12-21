@@ -1,4 +1,4 @@
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
 from .models import Post
@@ -11,8 +11,13 @@ def post_list(request):
 
     paginator = Paginator(posts_list, 3)
     page_number = request.GET.get("page", 1)
-    posts = paginator.page(page_number)
-
+    try:
+        posts = paginator.page(page_number)
+    except EmptyPage:
+        # Jei page_number didesnis nei paginator.num_pages, graziname paskutini puslapi
+        
+        posts = paginator.page(paginator.num_pages)
+        
     return render(request, "blog/post/list.html", {"posts": posts})
 
 
